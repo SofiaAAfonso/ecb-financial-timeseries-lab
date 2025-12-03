@@ -4,6 +4,7 @@ import pandas as pd
 from statsmodels.tsa.arima.model import ARIMA
 from statsmodels.tsa.seasonal import STL
 from .ecb_api import fetch_timeseries
+from pathlib import Path
 
 # Dataset: MIR (MFI Interest Rates)
 # Series: Portugal, new loans to households for house purchase, AAR, monthly
@@ -86,8 +87,29 @@ def main() -> None:
         # 7) ARIMA example model
         model = ARIMA(y, order=(1, 1, 1))
         fit = model.fit()
-        print("\n=== ARIMA(1,1,1) summary ===")
-        print(fit.summary())
+
+        # --- Save ARIMA summary ---
+        Path("reports/models").mkdir(parents=True, exist_ok=True)
+        summary_path = Path("reports/models/arima_mir_pt_summary.txt")
+        with open(summary_path, "w") as f:
+            f.write(str(fit.summary()))
+        print(f"Saved ARIMA summary to: {summary_path}")
+
+        # --- Save residual diagnostics ---
+        import matplotlib.pyplot as plt
+
+        resid = pd.Series(fit.resid)
+
+        plt.figure(figsize=(8, 4))
+        plt.plot(resid)
+        plt.title("ARIMA residuals – MIR PT")
+        plt.xlabel("Time")
+        plt.ylabel("Residual")
+        plt.tight_layout()
+        diag_path = Path("reports/models/arima_mir_pt_residuals.png")
+        plt.savefig(diag_path, dpi=150)
+        plt.close()
+        print(f"Saved ARIMA residual plot to: {diag_path}")
     else:
         print("Not enough data for STL/ARIMA analysis.")
 
