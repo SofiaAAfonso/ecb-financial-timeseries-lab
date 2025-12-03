@@ -3,3 +3,4 @@ requests
 matplotlib
 statsmodels
 numpy
+pytest
