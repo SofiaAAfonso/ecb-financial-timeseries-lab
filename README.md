@@ -57,3 +57,57 @@ reports/
 
 notebooks/              # Exploratory work (future use)
 requirements.txt        # Python dependencies
+```
+
+## Statistical modelling choices
+
+**Why ARIMA?**
+
+As a first modelling layer, ARIMA models were used to capture:
+
+- persistence in short-term interest rate movements,
+- serial dependence in monthly changes,
+- short-run dynamics and shock propagation.
+
+Interest rates in the euro area are known to exhibit:
+
+- strong autocorrelation,
+- non-stationarity in levels,
+- regime shifts linked to monetary policy cycles.
+
+A first-difference ARIMA specification (d=1) is therefore used as a baseline
+modeling choice to remove non-stationarity while preserving short-run dynamics.
+
+The ARIMA(1,1,1) structure was selected as a simple, interpretable baseline
+that captures:
+
+- momentum effects (AR),
+- transitory shocks (MA),
+- noise variance (σ²).
+
+**Model diagnostics and limitations**
+
+Diagnostic output indicates:
+
+- low residual autocorrelation (Ljung–Box test),
+- non-normal residuals (Jarque–Bera test),
+- strong heteroskedasticity (variance not constant).
+
+This is consistent with interest rate dynamics in which:
+
+- volatility clusters,
+- regime shifts occur,
+- extreme events are more frequent than under a Gaussian assumption.
+
+As a consequence, the ARIMA model is interpreted as:
+
+> a baseline model for serial dependence, not a full volatility model.
+
+Extensions such as GARCH-type models or regime-switching frameworks are natural
+candidates for future iterations of this project.
+
+The emphasis in this repository is therefore on:
+
+- transparent baseline modeling,
+- reproducibility of estimates,
+- and interpretability of results.
