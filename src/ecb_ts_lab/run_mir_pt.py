@@ -1,10 +1,11 @@
-from pathlib import Path
 import matplotlib.pyplot as plt
 import pandas as pd
+from pathlib import Path
+
 from statsmodels.tsa.arima.model import ARIMA
 from statsmodels.tsa.seasonal import STL
+
 from .ecb_api import fetch_timeseries
-from pathlib import Path
 
 # Dataset: MIR (MFI Interest Rates)
 # Series: Portugal, new loans to households for house purchase, AAR, monthly
@@ -96,8 +97,6 @@ def main() -> None:
         print(f"Saved ARIMA summary to: {summary_path}")
 
         # --- Save residual diagnostics ---
-        import matplotlib.pyplot as plt
-
         resid = pd.Series(fit.resid)
 
         plt.figure(figsize=(8, 4))
